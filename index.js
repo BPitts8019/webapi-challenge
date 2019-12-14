@@ -12,28 +12,8 @@ I need this code, just don't know where, perhaps should make some middleware, do
 
 Go code!
 */
-const express = require("express");
-const helmet = require("helmet");
-const server = express();
-const port = process.env.port || 4000;
-
-//apply middleware
-server.use(helmet());
-server.use(express.json());
-
-//define routes
-server.get("/", (req, res) => {
-   res.json({
-      message: "Congratulations! You have a basic server. 🤓"
-   });
-});
-
-//404 Page not found
-server.use((req, res) => {
-   res.status(404).json({
-      message: "Page Not Found!"
-   });
-});
+const server = require("./server");
+const port = process.env.PORT || 4000;
 
 //start server
 server.listen(port, () => {
