@@ -33,10 +33,29 @@ router.post("/", validateProject, async (req, res, next) => {
    }
 });
 
+/**
+ * PUT   /api/projects/:id
+ * Update an existing  project
+ * @param {string} name
+ * @param {string} description
+ * @param {boolean} [completed]
+ * @returns {Object} the updated project
+ */
+router.put("/:id", validateProject, async (req, res, next) => {
+   try {
+      const project = await projectsDb.update(req.params.id, req.project);
 
-router.put("/");
+      if (!project) {
+         return res.status(404).json({message: "No project found with that ID."});
+      };
+
+      res.json(project);
+   } catch (error) {
+      next(error);
+   }
+});
 
 
-router.delete("/");
+router.delete("/:id");
 
 module.exports = router;
