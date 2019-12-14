@@ -21,10 +21,16 @@ router.get("/", async (req, res, next) => {
  * Creates a new project and adds it to the database
  * @param {string} name
  * @param {string} description
+ * @param {boolean} [completed]
  * @returns {Object} the new project
  */
 router.post("/", validateProject, async (req, res, next) => {
-   res.json(req.project);
+   try {
+      const newProject = await projectsDb.insert(req.project);
+      res.status(201).json(newProject);
+   } catch (error) {
+      next(error);
+   }
 });
 
 

@@ -1,3 +1,11 @@
+/**
+ * validateProject
+ * validates the req body 
+ * @param {string} name
+ * @param {string} description
+ * @param {boolean} [completed]
+ * @returns {Object} the new project stored in req.project
+ */
 const validateProject = (req, res, next) => {
    if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json("Please provide a name and description for the project.");
@@ -11,14 +19,14 @@ const validateProject = (req, res, next) => {
       return res.status(400).json({message: "There must be a description for the project."});
    }
 
-   if (typeof req.completed !== "undefined" && typeof req.completed !== "boolean") {
+   if (typeof req.body.completed !== "undefined" && typeof req.body.completed !== "boolean") {
       return res.status(400).json({message: "The \'completed\' property must be boolean"});
    }
 
    req.project = {
       name: req.body.name,
       description: req.body.description,
-      completed: req.completed
+      completed: req.body.completed
    }
    next();
 }
