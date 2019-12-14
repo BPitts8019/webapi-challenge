@@ -55,7 +55,26 @@ router.put("/:id", validateProject, async (req, res, next) => {
    }
 });
 
+/**
+ * Delete   /api/projects/:id
+ * Delete an existing  project
+ * @param {string} name
+ * @param {string} description
+ * @param {boolean} [completed]
+ * @returns {Object} the updated project
+ */
+router.delete("/:id", async (req, res, next) => {
+   try {
+      const numFiles = await projectsDb.remove(req.params.id);
 
-router.delete("/:id");
+      if (numFiles < 1) {
+         return res.status(404).json({message: "No project found with that ID."});
+      };
+
+      res.json({message: "Project removed!"});
+   } catch (error) {
+      next(error);
+   }
+});
 
 module.exports = router;
