@@ -96,4 +96,24 @@ router.delete("/:id", async (req, res, next) => {
    }
 });
 
+/**
+ * GET   /api/projects/:id/actions
+ * Get the actions for an existing project
+ * @param {number} id
+ * @returns {Array} the actions
+ */
+router.get("/:id/actions", async (req, res, next) => {
+   try {
+      const project = await projectsDb.get(Number(req.params.id));
+      if (!project) {
+         return res.status(404).json({message: "No project found with that ID."});
+      };
+      
+      const actions = await projectsDb.getProjectActions(project.id);
+      res.json(actions);
+   } catch (error) {
+      next(error);
+   }
+});
+
 module.exports = router;
