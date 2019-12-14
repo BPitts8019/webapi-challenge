@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const projectsDb = require("../data/helpers/projectModel");
 const actionsDb = require("../data/helpers/actionModel");
 const { validateAction } = require("../middleware/validate");
 
@@ -17,5 +18,27 @@ router.get("/", async (req, res, next) => {
    }
 });
 
+/**
+ * POST   /api/actions
+ * Creates a new project and adds it to the database
+ * @param {number} project_id
+ * @param {string} description
+ * @param {string} notes
+ * @param {boolean} [completed]
+ * @returns {Object} the new action
+ */
+router.post("/", validateAction, async (req, res, next) => {
+   try {
+      const project = await projectsDb.get(Number(req.action.project_id));
+      if (!project) {
+         return res.status(404).json({message: "Could not find a project with the specified ID."});
+      }
+
+      const newAction = await actionsDb.insert(req.action);
+      res.status(201).json(newAction);
+   } catch (error) {
+      next(error);
+   }
+});
 
 module.exports = router;
