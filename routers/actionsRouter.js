@@ -46,9 +46,32 @@ router.post("/", validateAction, async (req, res, next) => {
  * Get an existing action
  * @returns {Object} the requested project
  */
-router.get("/:action_id", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
    try {
-      const action = await actionsDb.get(req.params.action_id);
+      const action = await actionsDb.get(req.params.id);
+
+      if (!action) {
+         return res.status(404).json({message: "No action found with that ID."});
+      };
+
+      res.json(action);
+   } catch (error) {
+      next(error);
+   }
+});
+
+/**
+ * PUT   /api/actions/:id
+ * Update an existing action
+ * @param {number} project_id
+ * @param {string} description
+ * @param {string} notes
+ * @param {boolean} [completed]
+ * @returns {Object} the updated action
+ */
+router.put("/:id", validateAction, async (req, res, next) => {
+   try {
+      const action = await actionsDb.update(req.params.id, req.action);
 
       if (!action) {
          return res.status(404).json({message: "No action found with that ID."});
