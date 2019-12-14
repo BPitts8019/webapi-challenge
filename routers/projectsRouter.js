@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const projectsDb = require("../data/helpers/projectModel");
+const { validateProject } = require("../middleware/validate");
 
 /**
  * GET   /api/projects
@@ -15,8 +16,16 @@ router.get("/", async (req, res, next) => {
    }
 });
 
-
-router.post("/");
+/**
+ * POST   /api/projects
+ * Creates a new project and adds it to the database
+ * @param {string} name
+ * @param {string} description
+ * @returns {Object} the new project
+ */
+router.post("/", validateProject, async (req, res, next) => {
+   res.json(req.project);
+});
 
 
 router.put("/");
