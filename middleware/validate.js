@@ -1,6 +1,6 @@
 /**
  * validateProject
- * validates the req body 
+ * validates the req body for Projects API requests
  * @param {string} name
  * @param {string} description
  * @param {boolean} [completed]
@@ -31,6 +31,20 @@ const validateProject = (req, res, next) => {
    next();
 }
 
+
+/**
+ * validateAction
+ * validates the req body for Actions API requests
+ * @param {string} name
+ * @param {string} description
+ * @param {boolean} [completed]
+ * @returns {Object} the new project stored in req.project
+ */
+const validateAction = (req, res, next) => {
+   next();
+};
+
 module.exports = {
-   validateProject
+   validateProject,
+   validateAction
 }
