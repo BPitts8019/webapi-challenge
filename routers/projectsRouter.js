@@ -36,11 +36,12 @@ router.post("/", validateProject, async (req, res, next) => {
 /**
  * GET   /api/projects/:id
  * Get an existing project
+ * @param {number} id
  * @returns {Object} the requested project
  */
 router.get("/:id", async (req, res, next) => {
    try {
-      const project = await projectsDb.get(req.params.id);
+      const project = await projectsDb.get(Number(req.params.id));
 
       if (!project) {
          return res.status(404).json({message: "No project found with that ID."});
@@ -55,6 +56,7 @@ router.get("/:id", async (req, res, next) => {
 /**
  * PUT   /api/projects/:id
  * Update an existing  project
+ * @param {number} id
  * @param {string} name
  * @param {string} description
  * @param {boolean} [completed]
@@ -62,7 +64,7 @@ router.get("/:id", async (req, res, next) => {
  */
 router.put("/:id", validateProject, async (req, res, next) => {
    try {
-      const project = await projectsDb.update(req.params.id, req.project);
+      const project = await projectsDb.update(Number(req.params.id), req.project);
 
       if (!project) {
          return res.status(404).json({message: "No project found with that ID."});
@@ -77,14 +79,12 @@ router.put("/:id", validateProject, async (req, res, next) => {
 /**
  * Delete   /api/projects/:id
  * Delete an existing  project
- * @param {string} name
- * @param {string} description
- * @param {boolean} [completed]
- * @returns {Object} the updated project
+ * @param {number} id
+ * @returns {Object} success message
  */
 router.delete("/:id", async (req, res, next) => {
    try {
-      const numFiles = await projectsDb.remove(req.params.id);
+      const numFiles = await projectsDb.remove(Number(req.params.id));
 
       if (numFiles < 1) {
          return res.status(404).json({message: "No project found with that ID."});

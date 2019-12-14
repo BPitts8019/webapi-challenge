@@ -44,6 +44,7 @@ router.post("/", validateAction, async (req, res, next) => {
 /**
  * GET   /api/actions/:id
  * Get an existing action
+ * @param {number} id
  * @returns {Object} the requested project
  */
 router.get("/:id", async (req, res, next) => {
@@ -63,6 +64,7 @@ router.get("/:id", async (req, res, next) => {
 /**
  * PUT   /api/actions/:id
  * Update an existing action
+ * @param {number} id
  * @param {number} project_id
  * @param {string} description
  * @param {string} notes
@@ -78,6 +80,26 @@ router.put("/:id", validateAction, async (req, res, next) => {
       };
 
       res.json(action);
+   } catch (error) {
+      next(error);
+   }
+});
+
+/**
+ * Delete   /api/actions/:id
+ * Delete an existing action
+ * @param {number} id
+ * @returns {Object} success message
+ */
+router.delete("/:id", async (req, res, next) => {
+   try {
+      const numFiles = await actionsDb.remove(Number(req.params.id));
+
+      if (numFiles < 1) {
+         return res.status(404).json({message: "No action found with that ID."});
+      };
+
+      res.json({message: "Action removed!"});
    } catch (error) {
       next(error);
    }
