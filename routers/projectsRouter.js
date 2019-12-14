@@ -34,6 +34,25 @@ router.post("/", validateProject, async (req, res, next) => {
 });
 
 /**
+ * GET   /api/projects/:id
+ * Get an existing project
+ * @returns {Object} the requested project
+ */
+router.get("/:id", async (req, res, next) => {
+   try {
+      const project = await projectsDb.get(req.params.id);
+
+      if (!project) {
+         return res.status(404).json({message: "No project found with that ID."});
+      };
+
+      res.json(project);
+   } catch (error) {
+      next(error);
+   }
+});
+
+/**
  * PUT   /api/projects/:id
  * Update an existing  project
  * @param {string} name
