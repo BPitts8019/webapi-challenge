@@ -41,4 +41,23 @@ router.post("/", validateAction, async (req, res, next) => {
    }
 });
 
+/**
+ * GET   /api/actions/:id
+ * Get an existing action
+ * @returns {Object} the requested project
+ */
+router.get("/:action_id", async (req, res, next) => {
+   try {
+      const action = await actionsDb.get(req.params.action_id);
+
+      if (!action) {
+         return res.status(404).json({message: "No action found with that ID."});
+      };
+
+      res.json(action);
+   } catch (error) {
+      next(error);
+   }
+});
+
 module.exports = router;
